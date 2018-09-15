@@ -15,14 +15,36 @@ use Illuminate\Http\Request;
 
 $api = app('Dingo\Api\Routing\Router');
 
-$api->version('v1', function($api) {
-    $api->get('version', function() {
-        return response('this is version v1');
-    });
-});
+$api->version( 'v1', ['namespace' => "App\Http\Controllers\Api\\v1"], function($api) {
 
-$api->version('v2', function($api) {
-    $api->get('version', function() {
-        return response('this is version v2');
+    $api->group([
+        'middleware' => 'api.throttle',
+        'limit' => config('api.rate_limits.sign.limit'),
+        'expires' => config('api.rate_limits.sign.expires'),
+    ], function ($api) {
+
+        $api->post('user', "UserController@store")
+            ->name('user.store');
+
+        $api->post('sms','SmsController@store')
+            ->name('sms.send');
+
+
+
+        // Log in
+        $api->post('auth','AuthController@store')
+            ->name('api.auth.store');
+
+        //  刷新 Token
+        $api->put('auth/current','AuthController@update')
+            ->name('api.auth.update');
+
+        // 删除Token
+        $api->delete('auth/current','AuthController@destroy')
+            ->name('api.auth.destroy');
+
     });
+
+
+
 });
