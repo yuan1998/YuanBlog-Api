@@ -12,8 +12,10 @@ class Post extends Model
      *
      * @var array
      */
-    protected $guarded = ['id'];
-
+    protected $fillable = [
+      'title','body','description','excerpt','user_id','read_count','like_count',
+        'category_id','article_status','slug_title','cover','cover_other','other',
+    ];
 
     protected $table = "articles";
 

@@ -36,11 +36,15 @@ class AuthController extends Controller
         return $this->responseWithToken($token);
     }
 
-
     public function destroy ()
     {
         \Auth::guard('api')->logout();
         return $this->response->noContent();
+    }
+
+
+    public function checkLogin () {
+        return $this->response->array(\Auth::guard('api')->user());
     }
 
     public function responseWithToken ($token)

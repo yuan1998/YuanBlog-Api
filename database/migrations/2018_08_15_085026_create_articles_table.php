@@ -25,9 +25,9 @@ class CreateArticlesTable extends Migration
             $table->unsignedInteger('reply_count')->default(0)->comment('回复数量');
             $table->unsignedInteger('category_id')->comment('文章所属分类ID');
             $table->integer('article_status')->default(0)->comment('文章状态');
-            $table->string('slug_title')->comment('SEO标题');
-            $table->string('cover')->comment('文章封面');
-            $table->json('cover_other')->comment('文章封面其他内容');
+            $table->string('slug_title')->nullable()->comment('SEO标题');
+            $table->string('cover')->nullable()->comment('文章封面');
+            $table->json('cover_other')->nullable()->comment('文章封面其他内容');
             $table->json('other')->nullable()->comment('其他配置');
 
             $table->timestamps();

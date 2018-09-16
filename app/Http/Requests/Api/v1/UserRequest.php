@@ -26,7 +26,8 @@ class UserRequest extends FormRequest
         return [
             'username' => 'string|min:6|required',
             'password' => 'string|min:6|required',
-            'sms_key' => 'required',
+            'phone' => 'empty_if:sms_key|unique:users',
+            'sms_key' => 'empty_if:phone',
             'sms_code' => 'required'
             //
         ];
