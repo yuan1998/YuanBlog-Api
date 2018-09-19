@@ -17,7 +17,7 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version( 'v1', [
     'namespace' => "App\Http\Controllers\Api\\v1",
-    'middleware' => "serializer:array",
+    'middleware' => ["serializer:array",'bindings'],
 ], function($api) {
 
     $api->group([
@@ -25,6 +25,34 @@ $api->version( 'v1', [
         'limit' => config('api.rate_limits.access.limit'),
         'expires' => config('api.rate_limits.access.expires'),
     ],function ($api) {
+
+        // Get All Cat
+        $api->get('categories','CategoryController@index')
+            ->name('api.cat.index');
+
+        $api->get('posts','PostController@index')
+            ->name('api.post.index');
+
+        $api->get('posts/{post}','PostController@show')
+            ->name('api.post.show');
+
+
+        /**
+         *  登录才能调用的接口.
+         */
+        $api->group([
+            'middleware' => 'api.auth'
+        ],function ($api) {
+
+            // Create Cat
+            $api->post('category','CategoryController@store')
+                ->name('api.cat.store');
+
+            $api->post('images','ImageController@store')
+                ->name('api.image.store');
+
+        });
+
 
     });
 

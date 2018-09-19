@@ -128,6 +128,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'cat-parent' => [
+            'parenID' => 'parentId不存在.'
+        ]
     ],
 
     /*

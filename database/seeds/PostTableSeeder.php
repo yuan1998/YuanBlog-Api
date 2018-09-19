@@ -13,7 +13,7 @@ class PostTableSeeder extends Seeder
     public function run()
     {
         $users = '1';
-        $cats = \App\Models\Catagory::all()->pluck('id')->toArray();
+        $cats = \App\Models\Category::all()->pluck('id')->toArray();
 
         $faker = app(Faker\Generator::class);
 

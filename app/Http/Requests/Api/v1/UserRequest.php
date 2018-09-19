@@ -23,13 +23,29 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'username' => 'string|min:6|required',
-            'password' => 'string|min:6|required',
-            'phone' => 'empty_if:sms_key|unique:users',
-            'sms_key' => 'empty_if:phone',
-            'sms_code' => 'required'
-            //
-        ];
+
+        $arr = [];
+        switch($this->method()) {
+            case 'POST' :
+                $arr = [
+                    'username' => 'string|min:6|required',
+                    'password' => 'string|min:6|required',
+                    'phone' => 'empty_if:sms_key|unique:users',
+                    'sms_key' => 'empty_if:phone',
+                    'sms_code' => 'required'
+                    //
+                ];
+                break;
+            case 'PATCH':
+                $arr = [
+                    'username' => 'string',
+                    'email' => 'email',
+                    'description' => 'string',
+                    'avatar' => 'exists:images,id',
+                ];
+                break;
+        }
+
+        return $arr ;
     }
 }
