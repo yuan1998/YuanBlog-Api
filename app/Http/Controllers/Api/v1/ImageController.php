@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Requests\Api\v1\ImageRequest;
 use App\Models\Images;
 use App\Traits\ImageTrait;
-use Illuminate\Http\Request;
+use App\Transformers\ImageTransformer;
 
 class ImageController extends Controller
 {
@@ -14,24 +14,26 @@ class ImageController extends Controller
 
     public function store (ImageRequest $request)
     {
-
         $user = $this->user();
 
+        $result = $this->createImage($user->id , $request->image , $request->type , $request->size);
 
-        $result = $this->createImage($user , $request);
-
-
-        dd($result);
-
+        return $this->response->item($result , new ImageTransformer());
     }
 
 
-    public function createImage ($user , $request)
+    /**
+     * @param $user
+     * @param $image
+     * @param $type
+     * @param $size
+     * @return mixed
+     */
+    public static function createImage ($user , $image , $type , $size)
     {
-        $result = $this->saveImage($request->image , $request->type , $user->id , $request->size);
+        $result = self::saveImage($image , $type , $user, $size);
 
-//        Images::create($result);
-        return $result;
+        return Images::create($result);
     }
 
 

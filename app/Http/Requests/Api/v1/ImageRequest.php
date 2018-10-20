@@ -23,7 +23,7 @@ class ImageRequest extends FormRequest
      */
     public function rules()
     {
-        $size = $this->size;
+        $size = $this->size ?: 0;
         $rules = [
             "type" => 'required|in:avatar,post',
             'size' => 'string'

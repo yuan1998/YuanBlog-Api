@@ -11,11 +11,28 @@ class CategoryController extends Controller
 {
 
 
-    public function store (CategoryRequest $request)
+    public function store (CategoryRequest $request , Category $category)
     {
 
-        Category::create($request->toArray());
-        return $this->response->created();
+        if(!$this->user()->hasRole('administrator'))
+            return $this->response->errorUnauthorized();
+
+        $category->fill($request->all());
+
+        $category->save();
+
+        return $this->response->item($category , new CategoryTransformer());
+    }
+
+
+    public function destroy (Category $category)
+    {
+        if(!$this->user()->hasRole('administrator'))
+            return $this->response->errorUnauthorized();
+
+        $category->delete();
+
+        return $this->response->noContent();
     }
 
     public function index ()

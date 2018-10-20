@@ -47,6 +47,16 @@ $api->version( 'v1', [
             // Create Cat
             $api->post('category','CategoryController@store')
                 ->name('api.cat.store');
+            $api->patch('category/{category}','CategoryController@store')
+                ->name('api.cat.update');
+            $api->delete('category/{category}','CategoryController@destroy')
+                ->name('api.cat.destroy');
+
+
+
+
+            $api->post('post','PostController@store')
+                ->name('api.post.store');
 
             $api->post('images','ImageController@store')
                 ->name('api.image.store');
@@ -85,6 +95,9 @@ $api->version( 'v1', [
 
             // check is Log
             $api->get('user','UserController@me')
+                ->name('api.user.me');
+
+            $api->patch('user','UserController@update')
                 ->name('api.user.me');
 
             //  刷新 Token

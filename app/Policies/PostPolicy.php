@@ -9,8 +9,9 @@ class PostPolicy
 {
     use HandlesAuthorization;
 
-    public function delete ()
+    public function create (User $user)
     {
+        return $user->permission >= 5;
 
     }
 }

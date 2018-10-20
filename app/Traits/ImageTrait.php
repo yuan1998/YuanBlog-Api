@@ -7,7 +7,7 @@ use Image;
 trait ImageTrait {
 
 
-    public $allowedExtension = ['png' , 'jpg' , 'gif' ,'jpeg'];
+    public static $allowedExtension = ['png' , 'jpg' , 'gif' ,'jpeg'];
 
 
     /**
@@ -17,7 +17,7 @@ trait ImageTrait {
      * @param bool $size
      * @return array|bool
      */
-    public function saveImage ($file , $folder, $filePrefix , $size = false)
+    public static function saveImage ($file , $folder, $filePrefix , $size = false)
     {
 
         $time = time();
@@ -32,16 +32,18 @@ trait ImageTrait {
 
         $filename = "{$filePrefix}_{$time}_" . str_random(10) . ".$extension";
 
-        if( ! in_array($extension,$this->allowedExtension))
+        if( ! in_array($extension,self::$allowedExtension))
             return false;
 
         $file->move($uploadPath , $filename);
 
         if((int) $size && $extension != 'gif')
-            $this->reduceSize("$uploadPath/$filename",(int) $size);
+            self::reduceSize("$uploadPath/$filename",(int) $size);
 
         return [
-            'path' => "$folderName/$filename" ,
+            'type' => $folder,
+            'user_id' => $filePrefix,
+            'path' => "$folderName/$filename"
         ];
 
     }
@@ -51,7 +53,7 @@ trait ImageTrait {
      * @param $filePath
      * @param $size
      */
-    public function reduceSize ($filePath , $size)
+    public static function reduceSize ($filePath , $size)
     {
         $image = Image::make($filePath);
         $image->resize($size , null , function ( $constraint ) {

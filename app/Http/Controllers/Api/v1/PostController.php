@@ -8,11 +8,10 @@ use App\Transformers\PostTransformer;
 
 class PostController extends Controller
 {
-    //
+
 
     public function store (PostRequest $request)
     {
-
         Post::create($request->toArray());
         return $this->response->created();
     }

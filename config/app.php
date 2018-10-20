@@ -120,7 +120,6 @@ return [
     */
 
     'providers' => [
-        Dingo\Api\Provider\LaravelServiceProvider::class,
         /*
          * Laravel Framework Service Providers...
          */
@@ -150,7 +149,8 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Spatie\Permission\PermissionServiceProvider::class,
+        Dingo\Api\Provider\LaravelServiceProvider::class,
 
         /*
          * Application Service Providers...

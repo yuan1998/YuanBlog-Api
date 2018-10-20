@@ -26,10 +26,7 @@ class EmptyValidator extends \Illuminate\Validation\Validator {
 
     public function validateCatParent ($att , $value , $param)
     {
-        if ($value != 0 && !Category::find($value))
-            return false;
-
-        return true;
+        return !($value != null && !Category::find($value));
     }
 
 }

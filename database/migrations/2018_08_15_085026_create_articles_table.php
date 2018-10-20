@@ -23,7 +23,7 @@ class CreateArticlesTable extends Migration
             $table->unsignedInteger('read_count')->default(0)->comment('文章查看次数');
             $table->unsignedInteger('like_count')->default(0)->comment('用户点赞次数');
             $table->unsignedInteger('reply_count')->default(0)->comment('回复数量');
-            $table->unsignedInteger('category_id')->comment('文章所属分类ID');
+            $table->unsignedInteger('category_id')->nullable()->comment('文章所属分类ID');
             $table->integer('article_status')->default(0)->comment('文章状态');
             $table->string('slug_title')->nullable()->comment('SEO标题');
             $table->string('cover')->nullable()->comment('文章封面');
@@ -32,8 +32,8 @@ class CreateArticlesTable extends Migration
 
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('category_id')->references('id')->on('categorys');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
         });
     }
 

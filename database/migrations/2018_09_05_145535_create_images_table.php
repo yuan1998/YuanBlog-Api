@@ -18,8 +18,8 @@ class CreateImagesTable extends Migration
             $table->integer('user_id')->index()->comment('上传用户');
             $table->string('type')->index()->comment('照片类型');
             $table->string('path')->index()->comment('原尺寸');
-            $table->string('md_path')->comment('中等尺寸');
-            $table->string('sm_path')->comment('小尺寸');
+            $table->string('md_path')->nullable()->comment('中等尺寸');
+            $table->string('sm_path')->nullable()->comment('小尺寸');
             $table->timestamps();
         });
     }

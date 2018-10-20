@@ -23,12 +23,20 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'title' =>'required',
-            'description' => 'required',
-            'title_en' => 'string',
-            'parent_id' => 'cat_parent'
-            //
+        $result = [
+            'title'       => 'string',
+            'description' => 'string',
+            'title_en'    => 'string',
+            'parent_id'   => 'cat_parent',
         ];
+
+        switch (request()->method()) {
+            case 'POST' :
+                $result['title']       .= '|required';
+                $result['description'] .= '|required';
+                break;
+        }
+
+        return $result;
     }
 }

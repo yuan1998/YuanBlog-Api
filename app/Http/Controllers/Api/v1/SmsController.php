@@ -14,7 +14,7 @@ class SmsController extends Controller
 
         $phone = $request['phone'];
 
-        if (!app()->environment('production')) {
+        if (app()->environment('production')) {
             $code = '1234';
         } else {
             // 生成4位随机数，左侧补0

@@ -23,11 +23,27 @@ class PostRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'title' => 'string|required',
-            'description' => 'required',
-            'body' => 'required',
-        ];
+        $rules = [];
+
+
+        switch ($this->method())
+        {
+            case "POST" :
+                $rules = [
+                    'title' => 'string|required',
+                    'description' => 'required',
+                    'body' => 'required',
+                ];
+                break;
+            case "PATCH":
+                $rules =  [
+                    'title' => 'string|required',
+                    'description' => 'required',
+                    'body' => 'required',
+
+                ];
+        }
+        return $rules ;
     }
 
 }

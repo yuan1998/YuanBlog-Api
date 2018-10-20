@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\Category;
 
 class CatTableSeeder extends Seeder
 {
@@ -36,6 +37,9 @@ class CatTableSeeder extends Seeder
           ],
         ];
 
-        \Illuminate\Support\Facades\DB::table('categorys')->insert($cat);
+        foreach ($cat as $item)
+        {
+            Category::create($item);
+        }
     }
 }

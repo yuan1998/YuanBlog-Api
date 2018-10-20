@@ -37,11 +37,14 @@ class UserRequest extends FormRequest
                 ];
                 break;
             case 'PATCH':
+                $size =  $this->size;
                 $arr = [
                     'username' => 'string',
                     'email' => 'email',
+                    'size' => 'string',
                     'description' => 'string',
-                    'avatar' => 'exists:images,id',
+                    'avatar' => 'empty_if:image|exists:images,id',
+                    'image' => "empty_if:avatar|mimes:jpeg,bmp,png,gif|dimensions:min_width=$size,min_height=$size"
                 ];
                 break;
         }

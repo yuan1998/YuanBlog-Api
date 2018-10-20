@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
+use App\Observers\CategoryObserver;
 use App\Observers\PostObserver;
 use App\Validations\EmptyValidator;
 use Illuminate\Support\Facades\Validator;
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
         \Carbon\Carbon::setLocale('zh');
 
         Post::observe(PostObserver::class);
+        Category::observe(CategoryObserver::class);
 
         Validator::resolver(function($translator, $data, $rules, $messages, $attributes)
         {
