@@ -27,14 +27,24 @@ $api->version( 'v1', [
     ],function ($api) {
 
         // Get All Cat
-        $api->get('categories','CategoryController@index')
+        $api->get('category','CategoryController@index')
             ->name('api.cat.index');
+        $api->get('category/tree','CategoryController@tree')
+            ->name('api.cat.tree');
+        $api->get('category/{category}','CategoryController@show')
+            ->name('api.cat.show');
+        $api->get('category/{category}/tree','CategoryController@showTree')
+            ->name('api.cat.showTree');
+
 
         $api->get('posts','PostController@index')
             ->name('api.post.index');
-
         $api->get('posts/{post}','PostController@show')
             ->name('api.post.show');
+
+
+        $api->get('tags/{tagIndex}/post','TagController@post')
+            ->name('api.tags.post');
 
 
         /**
@@ -52,11 +62,21 @@ $api->version( 'v1', [
             $api->delete('category/{category}','CategoryController@destroy')
                 ->name('api.cat.destroy');
 
+            // Tag
+            $api->post('tag','TagController@store')
+                ->name('api.tag.store');
+            $api->delete('tag/{tag}','TagController@destroy')
+                ->name('api.tag.destroy');
+
 
 
 
             $api->post('post','PostController@store')
                 ->name('api.post.store');
+            $api->patch('post/{post}','PostController@update')
+                ->name('api.post.update');
+            $api->delete('post/{post}','PostController@destroy')
+                ->name('api.post.destroy');
 
             $api->post('images','ImageController@store')
                 ->name('api.image.store');
@@ -67,6 +87,10 @@ $api->version( 'v1', [
     });
 
 
+    /**
+     * 有限制的接口.
+     *
+     */
     $api->group([
         'middleware' => 'api.throttle',
         'limit' => config('api.rate_limits.sign.limit'),

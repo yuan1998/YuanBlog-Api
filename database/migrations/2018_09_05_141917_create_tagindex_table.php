@@ -16,6 +16,7 @@ class CreateTagindexTable extends Migration
         Schema::create('tagindex', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->comment('标题');
+            $table->string('description')->nullable()->comment('标题');
             $table->integer('count')->default(0)->comment('次数');
 
             $table->timestamps();

@@ -16,7 +16,11 @@ class ImageController extends Controller
     {
         $user = $this->user();
 
-        $result = $this->createImage($user->id , $request->image , $request->type , $request->size);
+        $data = $request->only(['type' , 'image' , 'size']);
+
+        $data['user_id'] = $user->id || 0;
+
+        $result = $this->createImage( $data);
 
         return $this->response->item($result , new ImageTransformer());
     }
@@ -29,11 +33,13 @@ class ImageController extends Controller
      * @param $size
      * @return mixed
      */
-    public static function createImage ($user , $image , $type , $size)
+    public static function createImage ($data)
     {
-        $result = self::saveImage($image , $type , $user, $size);
+        $path = self::saveImage($data['image'] , $data['type'] , $data['user_id'] ,$data['size']);
 
-        return Images::create($result);
+        $data['path'] = $path;
+
+        return Images::create($data);
     }
 
 

@@ -4,15 +4,16 @@ namespace App\Validations;
 
 use App\Models\Category;
 
-class EmptyValidator extends \Illuminate\Validation\Validator {
+class EmptyValidator extends \Illuminate\Validation\Validator
+{
 
-    public function validateEmpty ($att , $value)
+    public function validateEmpty($att, $value)
     {
-        return ! $this->validateRequired($att , $value);
+        return !$this->validateRequired($att, $value);
     }
 
 
-    public function validateEmptyIf ($att,$value , $param)
+    public function validateEmptyIf($att, $value, $param)
     {
         $key = $param[0];
 
@@ -24,9 +25,11 @@ class EmptyValidator extends \Illuminate\Validation\Validator {
     }
 
 
-    public function validateCatParent ($att , $value , $param)
+    public function validateCatParent($att, $value, $param)
     {
         return !($value != null && !Category::find($value));
     }
+
+
 
 }

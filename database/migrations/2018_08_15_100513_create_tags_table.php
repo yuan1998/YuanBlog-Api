@@ -16,10 +16,8 @@ class CreateTagsTable extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->comment('标题');
-            $table->string('description')->nullable()->comment('描述');
             $table->unsignedInteger('article_id')->comment('文章ID');
-
-            $table->foreign('article_id')->references('id')->on('articles');
+            $table->foreign('article_id')->references('id')->on('articles')->onDelete('cascade');
             $table->timestamps();
         });
     }

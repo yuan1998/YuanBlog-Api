@@ -1,62 +1,66 @@
 <?php
 namespace App\Traits;
 
+use Illuminate\Support\Facades\Storage;
 use Image;
 
 
 trait ImageTrait {
 
-
-    public static $allowedExtension = ['png' , 'jpg' , 'gif' ,'jpeg'];
+    /**
+     * [$allowed_ext description]
+     * @var [type]
+     */
+    public static $allowed_ext = ['png','jpg','gif','jpeg'];
 
 
     /**
-     * @param $file
-     * @param $folder
-     * @param $filePrefix
-     * @param bool $size
-     * @return array|bool
+     * save Upload File TO storage.
+     *
+     * @param      $file
+     * @param      $folder
+     * @param      $file_prefix
+     * @param bool $maxWidth
+     * @return array|boola
      */
-    public static function saveImage ($file , $folder, $filePrefix , $size = false)
+    public static function saveImage ($file , $folder , $file_prefix , $maxWidth = false)
     {
 
-        $time = time();
-        // /uploads/images/avatars/201809/21/
-        $folderName = "/uploads/images/$folder/" . date("Ym/d",$time);
+        $folder_name = "images/$folder/". date("Ym/d",time());
 
-        $uploadPath = public_path() . $folderName;
+        $ext         = strtolower($file->getClientOriginalExtension()) ?: 'png';
 
+        $filename    = $file_prefix . '_' . time() . '_' . str_random(10) . '.' . $ext;
 
-        $extension = strtolower($file->getClientOriginalExtension()) ?: 'png';
-
-
-        $filename = "{$filePrefix}_{$time}_" . str_random(10) . ".$extension";
-
-        if( ! in_array($extension,self::$allowedExtension))
+        if(!in_array($ext,static::$allowed_ext)){
             return false;
+        }
 
-        $file->move($uploadPath , $filename);
+        $filePath = $file->storeAs($folder_name , $filename);
 
-        if((int) $size && $extension != 'gif')
-            self::reduceSize("$uploadPath/$filename",(int) $size);
+        if($maxWidth && $ext != 'git'){
+            static::reduceImage($maxWidth , $filePath);
+        }
 
-        return [
-            'type' => $folder,
-            'user_id' => $filePrefix,
-            'path' => "$folderName/$filename"
-        ];
+
+        return $filePath;
 
     }
 
 
     /**
+     * Reduce Image Size.
+     *
+     * @param $maxWidth
      * @param $filePath
-     * @param $size
      */
-    public static function reduceSize ($filePath , $size)
+    public static function reduceImage ($maxWidth , $filePath)
     {
-        $image = Image::make($filePath);
-        $image->resize($size , null , function ( $constraint ) {
+        $filePath = Storage::getAdapter()->getPathPrefix().$filePath;
+
+        $img = Image::make($filePath);
+
+        $img->resize($maxWidth,null, function ($constraint) {
             // 设定宽度是 $max_width，高度等比例双方缩放
             $constraint->aspectRatio();
 
@@ -64,8 +68,7 @@ trait ImageTrait {
             $constraint->upsize();
         });
 
-        $image->save();
-
+        $img->save();
     }
 
 }

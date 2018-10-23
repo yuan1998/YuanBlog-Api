@@ -8,23 +8,47 @@ use League\Fractal\TransformerAbstract;
 class CategoryTransformer extends TransformerAbstract
 {
 
-    protected $availableIncludes = ['tree'];
+    protected $availableIncludes = ['children' , 'parent'];
+
+    protected $type;
+
+    public function __construct($type= 'default')
+    {
+        $this->type = $type;
+    }
 
     public function transform(Category $category)
     {
-        return [
+        $result = [
             'id' => $category->id,
             'description' => $category->description,
             'title' => $category->title,
             'title_en' => $category->title_en,
             'parent_id' => $category->parent_id,
         ];
+
+        if($this->type == 'tree') {
+            $result['children'] = [];
+            if($category->relationLoaded('children') ){
+                foreach($category->getRelation('children') as $child) {
+                    $result['children'][] = $this->transform($child);
+                }
+            }
+        }
+
+        return $result;
     }
 
 
-    public function includeTree (Category $category)
+    public function includeChildren (Category $category)
     {
-        return $this->item($category->children ,new CategoryTransformer());
+        return $this->collection($category->children , new static());
+    }
+
+    public function includeParent (Category $category)
+    {
+        return $this->collection($category->parent , new static());
+
     }
 
 }

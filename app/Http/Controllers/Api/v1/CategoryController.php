@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Requests\Api\v1\CategoryRequest;
 use App\Models\Category;
 use App\Transformers\CategoryTransformer;
+use App\Transformers\CategoryTreeTransformer;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -35,20 +36,33 @@ class CategoryController extends Controller
         return $this->response->noContent();
     }
 
-    public function index ()
+    public function index (Category $category)
     {
+        $arr = $category->get();
 
-        $arr = Category::all();
 
         return $this->response->collection($arr,new CategoryTransformer());
     }
 
 
-    public function treeIndex ()
+    public function show (Category $category)
     {
-        $arr = Category::where('id',0)->get();
 
-        return $this->response->array($arr,new CategoryTransformer());
+        return $this->response->item($category , new CategoryTransformer());
     }
+
+    public function showTree (Category $category)
+    {
+        $category->setRelation('children' , $category->descendants);
+        return $this->response->item($category , new CategoryTransformer('tree'));
+
+    }
+
+    public function tree (Category $category)
+    {
+        $tree = $category->all()->toTree();
+        return $this->response->collection($tree , new CategoryTransformer('tree'));
+    }
+
 
 }
