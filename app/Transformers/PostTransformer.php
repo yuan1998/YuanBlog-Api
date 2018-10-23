@@ -31,7 +31,7 @@ class PostTransformer extends TransformerAbstract
             'category_id'    => (int) $post->category_id,
             'article_status' => (int) $post->article_status,
             'slug_title'     => (string) $post->slug_title,
-            'cover'          => Storage::url($post->cover),
+            'cover'          => $post->cover ? Storage::url($post->cover) : 'https://images.unsplash.com/photo-1522463475764-0fe09a698cef?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=dff57cfbdc74a43f2aaf8e9f2bf442cb&auto=format&fit=crop&w=2237&q=80',
             'create_at'      => $post->created_at->toDateTimeString(),
             'updated_at'     => $post->updated_at->toDateTimeString(),
             'cover_other'    => $post->cover_other,

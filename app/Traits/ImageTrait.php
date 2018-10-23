@@ -34,7 +34,7 @@ trait ImageTrait {
 
         if(!in_array($ext,static::$allowed_ext)){
             return false;
-            
+
         }
 
         $filePath = $file->storeAs($folder_name , $filename);
